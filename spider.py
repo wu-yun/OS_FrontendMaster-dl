@@ -26,6 +26,7 @@ def login(username, password, browser=browser):
     browser.form['rcp_user_login'] = username
     browser.form['rcp_user_pass'] = password
     browser.submit()
+
     return browser
 
 def get_course_list(browser=browser):
@@ -142,22 +143,21 @@ def load_data(path):
     with open(path, 'r') as file:
         return json.loads(file.read())
 
-def real_browser_login(username, password, browser=chrome):
+def real_browser_login(chrome=chrome):
     url_login = 'https://frontendmasters.com/login/'
-    browser.get(url_login)
+    chrome.get(url_login)
 
-    username = browser.find_element_by_id('rcp_user_login')
-    username.send_keys(username)
-    password = browser.find_element_by_id('rcp_user_pass')
-    password.send_keys(password)
+    username = chrome.find_element_by_id('rcp_user_login')
+    username.send_keys(ACCOUNT['username'])
+    password = chrome.find_element_by_id('rcp_user_pass')
+    password.send_keys(ACCOUNT['password'])
 
-    browser.find_element_by_id('rcp_login_submit').click()
+    chrome.find_element_by_id('rcp_login_submit').click()
 
 def get_video_source(video_link, browser=chrome):
     browser.get(video_link)
     time.sleep(1)
     source_link = browser.find_element_by_tag_name('video').find_element_by_tag_name('source').get_attribute('src')
-    browser.implicitly_wait(2)
     return source_link
 
 courses_data = load_data('./DATA.json')
@@ -177,18 +177,8 @@ def get_downloadable_links(courses_data):
                 print "Video URL: {0}".format(url_str)
                 subsection['downloadable_url'] = url_str
                 write_downloadable_data(courses_data)
-                time.sleep(5)
+                time.sleep(3)
     return courses_data
 
-url_login = 'https://frontendmasters.com/login/'
-chrome.get(url_login)
-
-username = chrome.find_element_by_id('rcp_user_login')
-username.send_keys()
-password = chrome.find_element_by_id('rcp_user_pass')
-password.send_keys()
-
-chrome.find_element_by_id('rcp_login_submit').click()
-
-courses_downloadable_data = get_downloadable_links(courses_data)
-
+real_browser_login()
+get_downloadable_links(courses_data)
