@@ -6,6 +6,7 @@ DownloadableLinks_*.json
 *.pyc
 venv/
 DATA_DOWNLOADABLE.json
+Download/
 
 #### joe made this: https://goel.io/joe
 
