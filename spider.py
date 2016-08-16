@@ -6,6 +6,11 @@ from bs4 import BeautifulSoup
 from config import ACCOUNT
 
 
+# Browser setup
+cookiejar = cookielib.CookieJar()
+browser = mechanize.Browser()
+browser.set_cookiejar(cookiejar)
+
 def login(username, password, browser=browser):
     BASE_URL = 'https://frontendmasters.com/login/'
     browser.open(BASE_URL)
@@ -35,7 +40,7 @@ def get_course_list(browser=browser):
 
     return course_links
 
-def get_videos_data(video_section_items):
+def get_videos_data(videos_section_items):
     subsections = []
 
     for video in videos_section_items:
@@ -68,7 +73,7 @@ def get_section_data(sections_items):
         videos_section = item.find('ul')
         videos_section_items = videos_section.find_all('li')
 
-        videos_data = get_videos_data(video_section_items)
+        videos_data = get_videos_data(videos_section_items)
         course_section['subsections'].extend(videos_data)
 
         sections.append(course_section)
@@ -103,10 +108,6 @@ def get_detailed_course_list(course_list, browser=browser):
 
     return detailed_course_list
 
-# Browser setup
-cookiejar = cookielib.CookieJar()
-browser = mechanize.Browser()
-browser.set_cookiejar(cookiejar)
 
 # Browser with all login info.
 browser = login(ACCOUNT['username'], ACCOUNT['password'])
