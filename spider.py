@@ -1,12 +1,12 @@
-import cookielib
-import mechanize
+# import cookielib
+# import mechanize
 import json
 import os
-import time
-from bs4 import BeautifulSoup
-from config import ACCOUNT
+# import time
+# from bs4 import BeautifulSoup
+# from config import ACCOUNT
 from urllib2 import urlopen, URLError, HTTPError
-from selenium import webdriver
+# from selenium import webdriver
 
 
 # Browser setup
@@ -15,7 +15,7 @@ browser = mechanize.Browser()
 browser.set_cookiejar(cookiejar)
 
 # Selenium browser setup
-chrome = webdriver.Chrome()
+# chrome = webdriver.Chrome()
 
 def login(username, password, browser=browser):
     BASE_URL = 'https://frontendmasters.com/login/'
@@ -156,7 +156,7 @@ def get_video_source(video_link, browser=chrome):
     source_link = browser.find_element_by_tag_name('video').find_element_by_tag_name('source').get_attribute('src')
     return source_link
 
-courses_data = load_data('./DATA.json')
+# courses_data = load_data('./DATA.json')
 
 def write_downloadable_data(courses_data):
     with open('DATA_DOWNLOADABLE.json', 'w') as file:
