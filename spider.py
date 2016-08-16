@@ -2,15 +2,20 @@ import cookielib
 import mechanize
 import json
 import os
+import time
 from bs4 import BeautifulSoup
 from config import ACCOUNT
 from urllib2 import urlopen, URLError, HTTPError
+from selenium import webdriver
 
 
 # Browser setup
 cookiejar = cookielib.CookieJar()
 browser = mechanize.Browser()
 browser.set_cookiejar(cookiejar)
+
+# Selenium browser setup
+chrome = webdriver.Chrome()
 
 def login(username, password, browser=browser):
     BASE_URL = 'https://frontendmasters.com/login/'
@@ -123,13 +128,67 @@ def download_file(url, path):
     except URLError, e:
         print "Error: ", e.code, url
 
-# Browser with all login info.
-browser = login(ACCOUNT['username'], ACCOUNT['password'])
-
 # Save data to file
-with open('DATA.json', 'w') as file:
-    course_list = get_course_list()
-    detailed_course_list = get_detailed_course_list(course_list)
-    file.write(json.dumps(detailed_course_list))
+def save_data():
+    # Browser with all login info.
+    browser = login(ACCOUNT['username'], ACCOUNT['password'])
 
+    with open('DATA.json', 'w') as file:
+        course_list = get_course_list()
+        detailed_course_list = get_detailed_course_list(course_list)
+        file.write(json.dumps(detailed_course_list))
+
+def load_data(path):
+    with open(path, 'r') as file:
+        return json.loads(file.read())
+
+def real_browser_login(username, password, browser=chrome):
+    url_login = 'https://frontendmasters.com/login/'
+    browser.get(url_login)
+
+    username = browser.find_element_by_id('rcp_user_login')
+    username.send_keys(username)
+    password = browser.find_element_by_id('rcp_user_pass')
+    password.send_keys(password)
+
+    browser.find_element_by_id('rcp_login_submit').click()
+
+def get_video_source(video_link, browser=chrome):
+    browser.get(video_link)
+    time.sleep(1)
+    source_link = browser.find_element_by_tag_name('video').find_element_by_tag_name('source').get_attribute('src')
+    browser.implicitly_wait(2)
+    return source_link
+
+courses_data = load_data('./DATA.json')
+
+def write_downloadable_data(courses_data):
+    with open('DATA_DOWNLOADABLE.json', 'w') as file:
+        file.write(json.dumps(courses_data))
+
+def get_downloadable_links(courses_data):
+    for course in courses_data:
+        url = course['url']
+        for section in course['sections']:
+            for subsection in section['subsections']:
+                video_url = url + subsection['url']
+                print "Retriving: {0}/{1}/{2}".format(course['title'], section['title'], subsection['title'])
+                url_str = get_video_source(video_url)
+                print "Video URL: {0}".format(url_str)
+                subsection['downloadable_url'] = url_str
+                write_downloadable_data(courses_data)
+                time.sleep(5)
+    return courses_data
+
+url_login = 'https://frontendmasters.com/login/'
+chrome.get(url_login)
+
+username = chrome.find_element_by_id('rcp_user_login')
+username.send_keys()
+password = chrome.find_element_by_id('rcp_user_pass')
+password.send_keys()
+
+chrome.find_element_by_id('rcp_login_submit').click()
+
+courses_downloadable_data = get_downloadable_links(courses_data)
 
