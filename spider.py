@@ -1,9 +1,10 @@
 import cookielib
 import mechanize
-import urllib2
 import json
+import os
 from bs4 import BeautifulSoup
 from config import ACCOUNT
+from urllib2 import urlopen, URLError, HTTPError
 
 
 # Browser setup
@@ -108,6 +109,19 @@ def get_detailed_course_list(course_list, browser=browser):
 
     return detailed_course_list
 
+def download_file(url, path):
+    try:
+        buff = urlopen(url)
+        print "Downloading: %s" % (path)
+
+        # Open file for writing
+        with open(path, 'wb') as local_file:
+            local_file.write(buff.read())
+
+    except HTTPError, e:
+        print "Error: ", e.code, url
+    except URLError, e:
+        print "Error: ", e.code, url
 
 # Browser with all login info.
 browser = login(ACCOUNT['username'], ACCOUNT['password'])
