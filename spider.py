@@ -116,18 +116,14 @@ def get_detailed_course_list(course_list, browser=browser):
     return detailed_course_list
 
 def download_file(url, path):
-    try:
-        buff = urlopen(url)
-        print "Downloading: %s" % (path)
 
-        # Open file for writing
-        with open(path, 'wb') as local_file:
-            local_file.write(buff.read())
+    print url
+    buff = urlopen(url)
+    print "Downloading: %s" % (path)
 
-    except HTTPError, e:
-        print "Error: ", e.code, url
-    except URLError, e:
-        print "Error: ", e.code, url
+    with open(path, 'wb') as local_file:
+        local_file.write(buff.read())
+
 
 # Save data to file
 def save_data():
@@ -178,7 +174,37 @@ def get_downloadable_links(courses_data):
                 subsection['downloadable_url'] = url_str
                 write_downloadable_data(courses_data)
                 time.sleep(3)
+
     return courses_data
 
-real_browser_login()
-get_downloadable_links(courses_data)
+# real_browser_login()
+# get_downloadable_links(courses_data)
+
+courses_detailed_data = load_data('./DATA_DOWNLOADABLE.json')
+
+def create_path(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def download_courses(courses_array):
+    # Create download directory
+    create_path('./Download')
+
+    for i0, course in enumerate(courses_array):
+        title = course['title']
+        # Create course directory
+        course_path = './Download/{0}'.format(title)
+        create_path(course_path)
+
+        for i1, section in enumerate(course['sections']):
+            section_title = section['title']
+
+            for i2, subsection in enumerate(section['subsections']):
+                subsection_title = subsection['title']
+                print "Downloading: {0}".format(subsection_title)
+
+                file_path = course_path + '/' + str(i1) + '-' + str(i2) + section_title + '|' + subsection_title + '.mp4'
+
+                download_file(subsection['downloadable_url'], file_path)
+
+download_courses(courses_detailed_data[:8])
