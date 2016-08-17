@@ -1,12 +1,13 @@
-# import cookielib
-# import mechanize
+import cookielib
+import mechanize
 import json
 import os
-# import time
-# from bs4 import BeautifulSoup
-# from config import ACCOUNT
+import string
+import time
+from bs4 import BeautifulSoup
+from config import ACCOUNT
 from urllib2 import urlopen, URLError, HTTPError
-# from selenium import webdriver
+from selenium import webdriver
 
 
 # Browser setup
@@ -15,7 +16,7 @@ browser = mechanize.Browser()
 browser.set_cookiejar(cookiejar)
 
 # Selenium browser setup
-# chrome = webdriver.Chrome()
+chrome = webdriver.Chrome()
 
 def login(username, password, browser=browser):
     BASE_URL = 'https://frontendmasters.com/login/'
@@ -124,6 +125,23 @@ def download_file(url, path):
     with open(path, 'wb') as local_file:
         local_file.write(buff.read())
 
+def format_filename(s):
+    """Take a string and return a valid filename constructed from the string.
+Uses a whitelist approach: any characters not present in valid_chars are
+removed. Also spaces are replaced with underscores.
+
+Note: this method may produce invalid filenames such as ``, `.` or `..`
+When I use this method I prepend a date string like '2009_01_15_19_46_32_'
+and append a file extension like '.txt', so I avoid the potential of using
+an invalid filename.
+
+"""
+    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+    filename = ''.join(c for c in s if c in valid_chars)
+    filename = filename.replace(' ','_') # I don't like spaces in filenames.
+    return filename
+
+
 
 # Save data to file
 def save_data():
@@ -142,13 +160,16 @@ def load_data(path):
 def real_browser_login(chrome=chrome):
     url_login = 'https://frontendmasters.com/login/'
     chrome.get(url_login)
+    time.sleep(2)
 
     username = chrome.find_element_by_id('rcp_user_login')
     username.send_keys(ACCOUNT['username'])
     password = chrome.find_element_by_id('rcp_user_pass')
     password.send_keys(ACCOUNT['password'])
 
+    time.sleep(2)
     chrome.find_element_by_id('rcp_login_submit').click()
+
 
 def get_video_source(video_link, browser=chrome):
     browser.get(video_link)
@@ -156,7 +177,7 @@ def get_video_source(video_link, browser=chrome):
     source_link = browser.find_element_by_tag_name('video').find_element_by_tag_name('source').get_attribute('src')
     return source_link
 
-# courses_data = load_data('./DATA.json')
+courses_data = load_data('./DATA_DOWNLOADABLE.json')
 
 def write_downloadable_data(courses_data):
     with open('DATA_DOWNLOADABLE.json', 'w') as file:
@@ -167,20 +188,22 @@ def get_downloadable_links(courses_data):
         url = course['url']
         for section in course['sections']:
             for subsection in section['subsections']:
-                video_url = url + subsection['url']
-                print "Retriving: {0}/{1}/{2}".format(course['title'], section['title'], subsection['title'])
-                url_str = get_video_source(video_url)
-                print "Video URL: {0}".format(url_str)
-                subsection['downloadable_url'] = url_str
-                write_downloadable_data(courses_data)
-                time.sleep(3)
+
+                if subsection['downloadable_url'] is None:
+                    video_url = url + subsection['url']
+                    print "Retriving: {0}/{1}/{2}".format(format_filename(course['title']), format_filename(section['title']), format_filename(subsection['title']))
+                    url_str = get_video_source(video_url)
+                    print "Video URL: {0}".format(url_str)
+                    subsection['downloadable_url'] = url_str
+                    write_downloadable_data(courses_data)
+                    time.sleep(3)
 
     return courses_data
 
-# real_browser_login()
-# get_downloadable_links(courses_data)
+real_browser_login()
+get_downloadable_links(courses_data)
 
-courses_detailed_data = load_data('./DATA_DOWNLOADABLE.json')
+# courses_detailed_data = load_data('./DATA_DOWNLOADABLE.json')
 
 def create_path(path):
     if not os.path.exists(path):
@@ -193,7 +216,7 @@ def download_courses(courses_array):
     for i0, course in enumerate(courses_array):
         title = course['title']
         # Create course directory
-        course_path = './Download/{0}'.format(title)
+        course_path = './Download/{0}-{1}'.format(i0, title)
         create_path(course_path)
 
         for i1, section in enumerate(course['sections']):
@@ -203,8 +226,10 @@ def download_courses(courses_array):
                 subsection_title = subsection['title']
                 print "Downloading: {0}".format(subsection_title)
 
-                file_path = course_path + '/' + str(i1) + '-' + str(i2) + section_title + '|' + subsection_title + '.mp4'
+                filename = str(i1) + '-' + str(i2) + section_title + '|' + subsection_title + '.mp4'
+
+                file_path = course_path + '/' + format_filename(filename)
 
                 download_file(subsection['downloadable_url'], file_path)
 
-download_courses(courses_detailed_data[:8])
+# download_courses(courses_detailed_data)
