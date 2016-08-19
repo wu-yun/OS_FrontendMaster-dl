@@ -200,10 +200,10 @@ def get_downloadable_links(courses_data):
 
     return courses_data
 
-real_browser_login()
-get_downloadable_links(courses_data)
+# real_browser_login()
+# get_downloadable_links(courses_data)
 
-# courses_detailed_data = load_data('./DATA_DOWNLOADABLE.json')
+courses_detailed_data = load_data('./DATA_DOWNLOADABLE.json')
 
 def create_path(path):
     if not os.path.exists(path):
@@ -224,12 +224,12 @@ def download_courses(courses_array):
 
             for i2, subsection in enumerate(section['subsections']):
                 subsection_title = subsection['title']
-                print "Downloading: {0}".format(subsection_title)
+                print "Downloading: {0}".format(format_filename(subsection_title))
 
-                filename = str(i1) + '-' + str(i2) + section_title + '|' + subsection_title + '.mp4'
+                filename = str(i1) + '-' + str(i2) + format_filename(section_title) + '|' + format_filename(subsection_title) + '.mp4'
 
                 file_path = course_path + '/' + format_filename(filename)
 
                 download_file(subsection['downloadable_url'], file_path)
 
-# download_courses(courses_detailed_data)
+download_courses(courses_detailed_data)
