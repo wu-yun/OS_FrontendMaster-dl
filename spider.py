@@ -118,12 +118,13 @@ def get_detailed_course_list(course_list, browser=browser):
 
 def download_file(url, path):
 
-    print url
-    buff = urlopen(url)
-    print "Downloading: %s" % (path)
+    if not os.path.isfile(path):
+        print url
+        buff = urlopen(url)
+        print "Downloading: %s" % (path)
 
-    with open(path, 'wb') as local_file:
-        local_file.write(buff.read())
+        with open(path, 'wb') as local_file:
+            local_file.write(buff.read())
 
 def format_filename(s):
     """Take a string and return a valid filename constructed from the string.
