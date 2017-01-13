@@ -1,5 +1,9 @@
 # Front-end Master Video Downloader
 
+**THE SCRIPT IS NO LONGER WORKING**
+
+However, if you can provide me an account with subscribtion OR until next time I have the subscribtion, I can start working on it to solve the issue.
+
 NOTE: This assumes you have got a Front-end Master Account
 
 ## Usage
