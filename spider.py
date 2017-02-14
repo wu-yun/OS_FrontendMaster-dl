@@ -174,6 +174,11 @@ def save_downloadable_links(courses_data):
                     subsection['downloadable_url'] = url_str
                     _write_downloadable_data(courses_data)
 
+def retrive_downloadable_links():
+    with open(DATA_COURSE_DETAILED_LIST_CDN, 'r') as file:
+        return json.load(file)
+
+
 
 # Func(PASSED): Helpers
 def download_file(url, path):
@@ -223,24 +228,3 @@ def download_courses(courses_array):
 
                 download_file(subsection['downloadable_url'], file_path)
 
-
-
-# APP: Spider Logic
-# -----------------
-browser_login()
-
-course_list = []
-if not os.path.isfile(DATA_COURSE_LIST):
-    save_course_list()
-course_list = retrive_course_list()
-
-time.sleep(5)
-
-course_detailed_list = []
-if not os.path.isfile(DATA_COURSE_DETAILED_LIST_CDN):
-    save_course_detailed_list(course_list)
-course_detailed_list = retrive_course_detailed_list()
-
-save_downloadable_links(course_detailed_list)
-
-# download_courses

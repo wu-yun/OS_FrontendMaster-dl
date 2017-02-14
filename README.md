@@ -1,7 +1,10 @@
 # Front-end Master Video Downloader
 
-NOTE: This assumes you have got a Front-end Master Account
+**PERSONAL USE ONLY**
 
+Please do NOT spread the downloadable links to others. Please keep you subscription to continue supporting [FrontendMaster](https://frontendmasters.com/) and getting updates from them.
+
+NOTE: This assumes you have got a Front-end Master Account
 
 ## Usage
 
@@ -22,7 +25,10 @@ pip install -r requirements.txt
 # Step 3: Rename config.sample.py -> config.py
 
 # Step 4: Run script
-python spider.py
+python run.py
+
+# Step 5: Happy hacking!
+# Find all the courses videos inside `Download` folder inside project directory
 ```
 
 ## Special Thanks
