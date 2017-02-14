@@ -24,3 +24,7 @@ pip install -r requirements.txt
 # Step 4: Run script
 python spider.py
 ```
+
+## Special Thanks
+
+Thanks [@andreiglingeanu](https://github.com/andreiglingeanu) for his kindness.

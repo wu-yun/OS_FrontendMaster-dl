@@ -145,7 +145,7 @@ def retrive_course_detailed_list():
         return json.load(file)
 
 
-# Func: Retrieve video CDN
+# Func(PASSED): Retrieve video CDN
 def _get_video_source():
     video_tag = browser.find_element_by_tag_name('video')
     source_tag = video_tag.find_element_by_tag_name('source')
