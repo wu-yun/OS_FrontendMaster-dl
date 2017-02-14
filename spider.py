@@ -13,30 +13,29 @@ import time
 import os.path
 
 # Constants
-DATA_COURSE_LIST = './DATA_COURSE_LIST.json'
+DATA_COURSE_LIST          = './DATA_COURSE_LIST.json'
 DATA_COURSE_DETAILED_LIST = './DATA_COURSE_DETAILED_LIST.json'
-
-URL_COURSE_LIST = 'https://frontendmasters.com/courses/'
+URL_LOG_IN                = 'https://frontendmasters.com/login/'
+URL_COURSE_LIST           = 'https://frontendmasters.com/courses/'
 
 # Global Browser Setup
 browser = webdriver.Firefox()
 
+# Func(PASSED): Authentication
 def browser_login():
-    BASE_URL = 'https://frontendmasters.com/login/'
-    browser.get(BASE_URL)
-    browser.implicitly_wait(2) # waiting request to complete (depends on your connection)
+    browser.get(URL_LOG_IN)
+    time.sleep(2)
 
     username = browser.find_element_by_id('rcp_user_login')
     username.send_keys(ACCOUNT['username'])
     password = browser.find_element_by_id('rcp_user_pass')
     password.send_keys(ACCOUNT['password'])
 
-    browser.implicitly_wait(2) # waiting request to complete
+    time.sleep(2)
     browser.find_element_by_id('rcp_login_submit').click()
-    browser.implicitly_wait(5)
 
 
-# Func: Retrieve courses list
+# Func(PASSED): Retrieve courses list
 def _get_course_list():
     BASE_URL = URL_COURSE_LIST
     browser.get(BASE_URL)
@@ -63,7 +62,7 @@ def retrive_course_list():
         return json.load(file)
 
 
-# Func: Retrieve detailed section list for each course
+# Func(PASSED): Retrieve detailed section list for each course
 def _get_section_data(sections_items):
     sections = []
     for item in sections_items:
@@ -253,6 +252,7 @@ def download_courses(courses_array):
 
 
 # APP: Spider Logic
+# -----------------
 browser_login()
 
 course_list = []
