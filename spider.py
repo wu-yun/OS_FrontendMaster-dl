@@ -1,7 +1,7 @@
 from bs4      import BeautifulSoup
 from config   import ACCOUNT
 from selenium import webdriver
-from urllib2   import urlopen, URLError, HTTPError
+from urllib2  import urlopen, URLError, HTTPError
 
 import httplib
 import cookielib
@@ -13,13 +13,13 @@ import time
 import os.path
 
 # Constants
-DATA_COURSE_LIST          = './DATA_COURSE_LIST.json'
-DATA_COURSE_DETAILED_LIST = './DATA_COURSE_DETAILED_LIST.json'
-URL_LOG_IN                = 'https://frontendmasters.com/login/'
-URL_COURSE_LIST           = 'https://frontendmasters.com/courses/'
+DATA_COURSE_LIST              = './DATA_COURSE_LIST.json'
+DATA_COURSE_DETAILED_LIST_CDN = './DATA_COURSE_DETAILED_LIST_CDN.json'
+URL_LOG_IN                    = 'https://frontendmasters.com/login/'
+URL_COURSE_LIST               = 'https://frontendmasters.com/courses/'
 
 # Global Browser Setup
-browser = webdriver.Firefox()
+browser = webdriver.Chrome()
 
 # Func(PASSED): Authentication
 def browser_login():
@@ -63,6 +63,28 @@ def retrive_course_list():
 
 
 # Func(PASSED): Retrieve detailed section list for each course
+def _get_videos_data(videos_section_items):
+    subsections = []
+
+    for video in videos_section_items:
+        # Course subsection data structure
+        course_subsection = {
+            'title': None,
+            'url': None,
+            'downloadable_url': None
+        }
+
+        course_subsection['url'] = video.find('a')['href']
+        course_subsection['title'] = video.find('a').find(
+            'span', {'class', 'text'}
+        ).find(
+            'span', {'class', 'title'}
+        ).getText()
+
+        subsections.append(course_subsection)
+
+    return subsections
+
 def _get_section_data(sections_items):
     sections = []
     for item in sections_items:
@@ -79,7 +101,7 @@ def _get_section_data(sections_items):
         videos_section = item.find('ul')
         videos_section_items = videos_section.find_all('li')
 
-        videos_data = get_videos_data(videos_section_items)
+        videos_data = _get_videos_data(videos_section_items)
         course_section['subsections'].extend(videos_data)
 
         sections.append(course_section)
@@ -115,114 +137,45 @@ def _get_detailed_course_list(course_list):
     return detailed_course_list
 
 def save_course_detailed_list(course_list):
-    with open(DATA_COURSE_DETAILED_LIST, 'w') as file:
+    with open(DATA_COURSE_DETAILED_LIST_CDN, 'w') as file:
         file.write(json.dumps(_get_detailed_course_list(course_list)))
 
 def retrive_course_detailed_list():
-    with open(DATA_COURSE_DETAILED_LIST, 'r') as file:
+    with open(DATA_COURSE_DETAILED_LIST_CDN, 'r') as file:
         return json.load(file)
 
 
 # Func: Retrieve video CDN
-def get_videos_data(videos_section_items):
-    subsections = []
-
-    for video in videos_section_items:
-        # Course subsection data structure
-        course_subsection = {
-            'title': None,
-            'url': None,
-            'downloadable_url': None
-        }
-
-        course_subsection['url'] = video.find('a')['href']
-        course_subsection['title'] = video.find('a').find(
-            'span', {'class', 'text'}
-        ).find(
-            'span', {'class', 'title'}
-        ).getText()
-
-        subsections.append(course_subsection)
-
-    return subsections
-
-def download_file(url, path):
-
-    if not os.path.isfile(path):
-        print(url)
-        buff = urlopen(url)
-        print("Downloading: %s" % (path))
-
-        with open(path, 'wb') as local_file:
-            local_file.write(buff.read())
-
-def format_filename(s):
-    """Take a string and return a valid filename constructed from the string.
-Uses a whitelist approach: any characters not present in valid_chars are
-removed. Also spaces are replaced with underscores.
-
-Note: this method may produce invalid filenames such as ``, `.` or `..`
-When I use this method I prepend a date string like '2009_01_15_19_46_32_'
-and append a file extension like '.txt', so I avoid the potential of using
-an invalid filename.
-
-"""
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    filename = ''.join(c for c in s if c in valid_chars)
-    filename = filename.replace(' ', '_')  # I don't like spaces in filenames.
-    return filename
-
-def save_data():
-    # Browser with all login info.
-    browser = login(ACCOUNT['username'], ACCOUNT['password'])
-
-    with open('DATA.json', 'w') as file:
-        course_list = get_course_list()
-        detailed_course_list = get_detailed_course_list(course_list)
-        file.write(json.dumps(detailed_course_list))
-
-def load_data(path):
-    with open(path, 'r') as file:
-        return json.loads(file.read())
-
-def get_video_source(video_link, browser=browser):
-    browser.get(video_link)
-    time.sleep(1)
-    source_link = browser.find_element_by_tag_name(
-        'video'
-    ).find_element_by_tag_name('source').get_attribute('src')
+def _get_video_source():
+    video_tag = browser.find_element_by_tag_name('video')
+    source_tag = video_tag.find_element_by_tag_name('source')
+    source_link = source_tag.get_attribute('src')
     return source_link
 
-
-# Func: Download resources via CDN
-def write_downloadable_data(courses_data):
-    with open('DATA_DOWNLOADABLE.json', 'w') as file:
+def _write_downloadable_data(courses_data):
+    with open(DATA_COURSE_DETAILED_LIST_CDN, 'w') as file:
         file.write(json.dumps(courses_data))
-
-def get_downloadable_links(courses_data):
+def save_downloadable_links(courses_data):
     for course in courses_data:
         url = course['url']
         for section in course['sections']:
             for subsection in section['subsections']:
-
                 if subsection['downloadable_url'] is None:
                     video_url = url + subsection['url']
                     print("Retriving: {0}/{1}/{2}".format(
                         format_filename(course['title']),
                         format_filename(section['title']),
                         format_filename(subsection['title'])))
-                    url_str = get_video_source(video_url)
+                    browser.get(video_url)
+                    # browser.implicitly_wait(5)
+                    time.sleep(5)
+                    url_str = _get_video_source()
                     print("Video URL: {0}".format(url_str))
                     subsection['downloadable_url'] = url_str
-                    write_downloadable_data(courses_data)
-                    time.sleep(3)
+                    _write_downloadable_data(courses_data)
 
-    return courses_data
 
-def create_path(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
-
+# Func: Download resources via CDN
 def download_courses(courses_array):
     # Create download directory
     create_path('./Download')
@@ -250,6 +203,26 @@ def download_courses(courses_array):
                 download_file(subsection['downloadable_url'], file_path)
 
 
+# Func: Helpers
+def download_file(url, path):
+    if not os.path.isfile(path):
+        buff = urlopen(url)
+        print("Downloading: %s" % (path))
+
+        with open(path, 'wb') as local_file:
+            local_file.write(buff.read())
+
+def format_filename(filename_str):
+    s = filename_str
+    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+    filename = ''.join(c for c in s if c in valid_chars)
+    filename = filename.replace(' ', '_')  # I don't like spaces in filenames.
+    return filename
+
+def create_path(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
 
 # APP: Spider Logic
 # -----------------
@@ -260,9 +233,13 @@ if not os.path.isfile(DATA_COURSE_LIST):
     save_course_list()
 course_list = retrive_course_list()
 
-time.sleep(15)
+time.sleep(5)
 
 course_detailed_list = []
-if not os.path.isfile(DATA_COURSE_DETAILED_LIST):
+if not os.path.isfile(DATA_COURSE_DETAILED_LIST_CDN):
     save_course_detailed_list(course_list)
 course_detailed_list = retrive_course_detailed_list()
+
+save_downloadable_links(course_detailed_list)
+
+# download_courses
