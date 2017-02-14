@@ -175,7 +175,28 @@ def save_downloadable_links(courses_data):
                     _write_downloadable_data(courses_data)
 
 
-# Func: Download resources via CDN
+# Func(PASSED): Helpers
+def download_file(url, path):
+    if not os.path.isfile(path):
+        buff = urlopen(url)
+        print("Downloading: %s" % (path))
+
+        with open(path, 'wb') as local_file:
+            local_file.write(buff.read())
+
+def format_filename(filename_str):
+    s = filename_str
+    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+    filename = ''.join(c for c in s if c in valid_chars)
+    filename = filename.replace(' ', '_')  # I don't like spaces in filenames.
+    return filename
+
+def create_path(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+# Func(PASSED): Download resources via CDN
 def download_courses(courses_array):
     # Create download directory
     create_path('./Download')
@@ -202,26 +223,6 @@ def download_courses(courses_array):
 
                 download_file(subsection['downloadable_url'], file_path)
 
-
-# Func: Helpers
-def download_file(url, path):
-    if not os.path.isfile(path):
-        buff = urlopen(url)
-        print("Downloading: %s" % (path))
-
-        with open(path, 'wb') as local_file:
-            local_file.write(buff.read())
-
-def format_filename(filename_str):
-    s = filename_str
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    filename = ''.join(c for c in s if c in valid_chars)
-    filename = filename.replace(' ', '_')  # I don't like spaces in filenames.
-    return filename
-
-def create_path(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
 
 
 # APP: Spider Logic
