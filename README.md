@@ -1,19 +1,20 @@
 # Front-end Master Video Downloader
 
-**THE SCRIPT IS NO LONGER WORKING**
-
-However, if you can provide me an account with subscribtion OR until next time I have the subscribtion, I can start working on it to solve the issue.
-
 NOTE: This assumes you have got a Front-end Master Account
+
 
 ## Usage
 
 **Requirements**
 
 - Python 2.7
-- Firefox Browser
+- Google Chrome
 
 ```python
+# Step 0: Install Google Chromedriver
+# The latest version can be found at 
+# https://sites.google.com/a/chromium.org/chromedriver/downloads
+
 # Step 1: Install dependencies
 pip install -r requirements.txt
 
