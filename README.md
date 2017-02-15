@@ -1,8 +1,14 @@
 # Front-end Master Video Downloader
 
-Please do NOT spread the downloadable links to others. Please keep you subscription to continue supporting [FrontendMaster](https://frontendmasters.com/) and getting updates from them.
+The default behavior of the script is to fetch and download **all** available courses. It is a time consuming process (about 30 minutes) since it use GUI browser to do the crawling. 
 
-NOTE: This assumes you have got a Frontend Master account with subscription
+You can optionally download the individual course you want after you have the `DATA_COURSEDETAILED_LIST_CDN.json` file.
+
+NOTE: 
+
+This assumes you have got a Frontend Master account with subscription
+
+Please do NOT spread the downloadable links to others. Please keep you subscription to continue supporting [FrontendMaster](https://frontendmasters.com/) and getting updates from them.
 
 ## Usage
 
