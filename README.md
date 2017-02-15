@@ -1,7 +1,5 @@
 # Front-end Master Video Downloader
 
-**PERSONAL USE ONLY**
-
 Please do NOT spread the downloadable links to others. Please keep you subscription to continue supporting [FrontendMaster](https://frontendmasters.com/) and getting updates from them.
 
 NOTE: This assumes you have got a Front-end Master Account
