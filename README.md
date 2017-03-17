@@ -10,6 +10,8 @@ This assumes you have got a Frontend Master account with subscription
 
 Please do NOT spread the downloadable links to others. Please keep you subscription to continue supporting [FrontendMaster](https://frontendmasters.com/) and getting updates from them.
 
+**`DATA_COURSE_DETAILED_LIST.json` and `DATA_COURSE_LIST.json` is NOT updated. You can delete them before running the script to get the lastest course & video list**
+
 ## Usage
 
 **Requirements**
