@@ -182,7 +182,7 @@ def retrive_downloadable_links():
 
 # Func(PASSED): Helpers
 def download_file(url, path):
-    if not os.path.isfile(path):
+    if not os.path.isfile(path) or os.path.getsize(path) == 0:
         buff = urlopen(url)
         print("Downloading: %s" % (path))
 
@@ -227,4 +227,3 @@ def download_courses(courses_array):
                 file_path = course_path + '/' + format_filename(filename)
 
                 download_file(subsection['downloadable_url'], file_path)
-
