@@ -72,3 +72,4 @@ build/
 .rvmrc
 geckodriver.log
 DATA_COURSE_DETAILED_LIST_CDN.json
+.vscode
