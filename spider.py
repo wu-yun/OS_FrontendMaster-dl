@@ -1,7 +1,8 @@
-from bs4      import BeautifulSoup
-from config   import ACCOUNT
-from selenium import webdriver
-from urllib2  import urlopen, URLError, HTTPError
+from bs4                             import BeautifulSoup
+from config                          import ACCOUNT
+from selenium                        import webdriver
+from selenium.webdriver.common.keys  import Keys
+from urllib2                         import urlopen, URLError, HTTPError
 
 import httplib
 import cookielib
@@ -31,8 +32,8 @@ def browser_login():
     password = browser.find_element_by_id('rcp_user_pass')
     password.send_keys(ACCOUNT['password'])
 
-    time.sleep(2)
-    browser.find_element_by_id('rcp_login_submit').click()
+    time.sleep(10)
+    password.send_keys(Keys.RETURN)
 
 
 # Func(PASSED): Retrieve courses list
@@ -75,12 +76,13 @@ def _get_videos_data(videos_section_items):
         }
 
         course_subsection['url'] = video.find('a')['href']
-        course_subsection['title'] = video.find('a').find(
+        title = video.find('a').find(
             'span', {'class', 'text'}
         ).find(
             'span', {'class', 'title'}
         ).getText()
 
+        course_subsection['title'] = format_filename(title)
         subsections.append(course_subsection)
 
     return subsections
@@ -148,13 +150,14 @@ def retrive_course_detailed_list():
 # Func(PASSED): Retrieve video CDN
 def _get_video_source():
     video_tag = browser.find_element_by_tag_name('video')
-    source_tag = video_tag.find_element_by_tag_name('source')
-    source_link = source_tag.get_attribute('src')
+    # source_tag = video_tag.find_element_by_tag_name('source')
+    source_link = video_tag.get_attribute('src')
     return source_link
 
 def _write_downloadable_data(courses_data):
     with open(DATA_COURSE_DETAILED_LIST_CDN, 'w') as file:
         file.write(json.dumps(courses_data))
+
 def save_downloadable_links(courses_data):
     for course in courses_data:
         url = course['url']
@@ -168,7 +171,7 @@ def save_downloadable_links(courses_data):
                         format_filename(subsection['title'])))
                     browser.get(video_url)
                     # browser.implicitly_wait(5)
-                    time.sleep(5)
+                    time.sleep(7)
                     url_str = _get_video_source()
                     print("Video URL: {0}".format(url_str))
                     subsection['downloadable_url'] = url_str
@@ -177,8 +180,6 @@ def save_downloadable_links(courses_data):
 def retrive_downloadable_links():
     with open(DATA_COURSE_DETAILED_LIST_CDN, 'r') as file:
         return json.load(file)
-
-
 
 # Func(PASSED): Helpers
 def download_file(url, path):
