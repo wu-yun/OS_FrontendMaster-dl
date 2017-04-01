@@ -39,6 +39,8 @@ class Spider(object):
         # Get downloadable CDN
         course_downloadbale = self._get_downloadable_links(course_detailed_list)
 
+        self.browser.close()
+
         # Download course videos
         self.download_course(course_downloadbale)
 

@@ -52,6 +52,10 @@ The default download path is `./Download` inside the repository directory.
 
 [01/04/2017] - Convert the existing script into command-line tool
 
-### Special Thanks
+### TODOs
 
-- Thanks [@andreiglingeanu](https://github.com/andreiglingeanu) for his kindness.
+- [ ] Support Window OS
+- [ ] Support download all available courses
+- [ ] Switching to `setuptools`
+
+As always PR of any kind is always welcomed! :rocket:
