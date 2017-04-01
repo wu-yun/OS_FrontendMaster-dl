@@ -11,7 +11,9 @@ Note: This cli tool does NOT support Window OS yet.
 
 ### Usage
 
-![](./screenshot.png)
+<img src="./img/screenshot.png" align="center">
+
+<img src="./img/course_id.png" align="cetner">
 
 To get help information,
 
@@ -27,7 +29,7 @@ Options:
   --help           Show this message and exit.
 ```
 
-To start,
+To start downloading course,
 
 ```bash
 python frontendmasters-dl.py --id YOUR-USERNAME --password YOUR-PASSWORD --course COURSE-ID
