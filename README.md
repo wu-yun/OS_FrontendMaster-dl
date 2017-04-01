@@ -1,42 +1,55 @@
-# Front-end Master Video Downloader
+# Front-end Masters Video Downloader
 
-The default behavior of the script is to fetch and download **all** available courses. It is a time consuming process (about 30 minutes) since it use GUI browser to do the crawling. 
+This command-line tool requires a Front-end Masters subscription. Go to [Enroll Page](https://frontendmasters.com/enroll/) to subscribe (39USD/month).
 
-You can optionally download the individual course you want after you have the `DATA_COURSEDETAILED_LIST_CDN.json` file.
+> Front-end Masters is expert front-end training fro you to master building quality web interfaces.
+> All video contents' Copyright belongs to MJG International.
 
-NOTE: 
+Please open an new issue if you have problem to use this tool.
 
-This assumes you have got a Frontend Master account with subscription
+Note: This cli tool does NOT support Window OS yet.
 
-Please do NOT spread the downloadable links to others. Please keep you subscription to continue supporting [FrontendMaster](https://frontendmasters.com/) and getting updates from them.
+### Usage
 
-**`DATA_COURSE_DETAILED_LIST.json` and `DATA_COURSE_LIST.json` is NOT updated. You can delete them before running the script to get the lastest course & video list**
+![](./screenshot.png)
 
-## Usage
+To get help information,
+
+```bash
+python frontendmasters-dl.py --help
+
+Usage: frontendmasters-dl.py [OPTIONS]
+
+Options:
+  --course TEXT    Course ID (e.g. `firebase-reac`)
+  --id TEXT        Frontend Master Username
+  --password TEXT  Frontend Master Password
+  --help           Show this message and exit.
+```
+
+To start,
+
+```bash
+python frontendmasters-dl.py --id YOUR-USERNAME --password YOUR-PASSWORD --course COURSE-ID
+```
+
+Alternatively you can use interactive prompt by running the script directly,
+
+```bash
+python frontendmasters-dl.py
+```
+
+The default download path is `./Download` inside the repository directory.
 
 **Requirements**
 
 - Python 2.7
 - Google Chrome
 
-```python
-# Step 0: Install Google Chromedriver
-# The latest version can be found at 
-# https://sites.google.com/a/chromium.org/chromedriver/downloads
+### Change Log
 
-# Step 1: Install dependencies
-pip install -r requirements.txt
+[01/04/2017] - Convert the existing script into command-line tool
 
-# Step 2: Edit account info. in config.sample.py
-# Step 3: Rename config.sample.py -> config.py
+### Special Thanks
 
-# Step 4: Run script
-python run.py
-
-# Step 5: Happy hacking!
-# Find all the courses videos inside `Download` folder inside project directory
-```
-
-## Special Thanks
-
-Thanks [@andreiglingeanu](https://github.com/andreiglingeanu) for his kindness.
+- Thanks [@andreiglingeanu](https://github.com/andreiglingeanu) for his kindness.
