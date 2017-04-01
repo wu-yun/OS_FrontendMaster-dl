@@ -59,13 +59,15 @@ The default download path is `./Download` inside the repository directory.
 
 ### TODOs
 
-- [ ] Support better exception handling 
-- [ ] Support Window OS
-- [ ] Support download all available courses
-- [ ] Switch to `setuptools`
-- [ ] Switch to head-less browser
+As always, PR of any kind is welcomed! :rocket:
 
-As always PR of any kind is always welcomed! :rocket:
+1. [ ] Support better exception handling 
+1. [ ] Add more tests
+1. [ ] Decouple page element and crawler logic
+1. [ ] Support Window OS
+1. [ ] Support download all available courses
+1. [ ] Switch to `setuptools`
+1. [ ] Switch to headless browser (e.g. PhantomJS)
 
 ### LICENSE
 

@@ -7,10 +7,16 @@ def format_filename(filename_str):
     s = filename_str
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
     filename = ''.join(c for c in s if c in valid_chars)
-    filename = filename.replace(' ', '_')  # I don't like spaces in filenames.
+    filename = filename.replace(' ', '_')
     return filename
 
 def download_file(url, path):
+    # FIXME(Xinyang): Better exception handling for empty url
+    if url is None:
+        return
+    if len(url) <= 1:
+        return
+
     if not os.path.isfile(path) or os.path.getsize(path) == 0:
         buff = urlopen(url)
         print("Downloading: %s" % (path))

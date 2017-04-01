@@ -135,7 +135,7 @@ class Spider(object):
 
                     video_url = url + subsection['url']
                     self.browser.get(video_url)
-                    time.sleep(5)
+                    time.sleep(8)
 
                     url_str = self._get_video_source()
                     print("Video URL: {0}".format(url_str))
