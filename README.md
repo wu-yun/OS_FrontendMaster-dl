@@ -59,6 +59,7 @@ The default download path is `./Download` inside the repository directory.
 
 ### TODOs
 
+- [ ] Support better exception handling 
 - [ ] Support Window OS
 - [ ] Support download all available courses
 - [ ] Switch to `setuptools`
