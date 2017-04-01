@@ -61,7 +61,8 @@ The default download path is `./Download` inside the repository directory.
 
 - [ ] Support Window OS
 - [ ] Support download all available courses
-- [ ] Switching to `setuptools`
+- [ ] Switch to `setuptools`
+- [ ] Switch to head-less browser
 
 As always PR of any kind is always welcomed! :rocket:
 
