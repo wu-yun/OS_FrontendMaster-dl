@@ -11,11 +11,21 @@ Note: This cli tool does NOT support Window OS yet.
 
 ### Usage
 
+**Requirements**
+
+- Python 2.7
+- Google Chrome
+- ChromeDriver - WebDriver for Chrome
+
+The latest version of Chrome webdriver can be found at link below and the **Setup** instruction can also be found at the same page,
+
+https://sites.google.com/a/chromium.org/chromedriver/downloads
+
+**Getting started**
+
 <img src="./img/screenshot.png" align="center">
 
 <img src="./img/course_id.png" align="cetner">
-
-To get help information,
 
 ```bash
 python frontendmasters-dl.py --help
@@ -29,7 +39,7 @@ Options:
   --help           Show this message and exit.
 ```
 
-To start downloading course,
+To download particle course,
 
 ```bash
 python frontendmasters-dl.py --id YOUR-USERNAME --password YOUR-PASSWORD --course COURSE-ID
@@ -42,11 +52,6 @@ python frontendmasters-dl.py
 ```
 
 The default download path is `./Download` inside the repository directory.
-
-**Requirements**
-
-- Python 2.7
-- Google Chrome
 
 ### Change Log
 
