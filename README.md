@@ -28,6 +28,12 @@ https://sites.google.com/a/chromium.org/chromedriver/downloads
 <img src="./img/course_id.png" align="cetner">
 
 ```bash
+pip install -r requirements.txt
+```
+
+Note: If you dont have `pip` install it using this guide https://pip.pypa.io/en/stable/installing/
+
+```bash
 python frontendmasters-dl.py --help
 
 Usage: frontendmasters-dl.py [OPTIONS]
