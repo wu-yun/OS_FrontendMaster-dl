@@ -21,17 +21,20 @@ The latest version of Chrome webdriver can be found at link below and the **Setu
 
 https://sites.google.com/a/chromium.org/chromedriver/downloads
 
-**Getting started**
+To install Python dependencies,
 
-<img src="./img/screenshot.png" align="center">
-
-<img src="./img/course_id.png" align="cetner">
 
 ```bash
 pip install -r requirements.txt
 ```
 
 Note: If you dont have `pip` install it using this guide https://pip.pypa.io/en/stable/installing/
+
+**Getting started**
+
+<img src="./img/screenshot.png" align="center">
+
+<img src="./img/course_id.png" align="cetner">
 
 ```bash
 python frontendmasters-dl.py --help
@@ -45,7 +48,7 @@ Options:
   --help           Show this message and exit.
 ```
 
-To download particle course,
+To download one particular course,
 
 ```bash
 python frontendmasters-dl.py --id YOUR-USERNAME --password YOUR-PASSWORD --course COURSE-ID
