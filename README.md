@@ -7,7 +7,7 @@ This command-line tool requires a Front-end Masters subscription. Go to [Enroll 
 
 Please open an new issue if you have problem to use this tool.
 
-Note: This cli tool does NOT support Window OS yet.
+Note: This cli tool does NOT support Window OS yet [#6](https://github.com/li-xinyang/OS_FrontendMaster-dl/issues/6).
 
 ### Usage
 
