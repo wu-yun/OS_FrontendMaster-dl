@@ -2,7 +2,7 @@ import click
 from extractor.spider import Spider
 
 @click.command()
-@click.option('--course', prompt='Course ID', help='Course ID (e.g. `firebase-reac`)')
+@click.option('--course', prompt='Course ID', help='Course ID (e.g. `firebase-react`)')
 @click.option('--id', prompt='Username', help='Frontend Master Username')
 @click.option('--password', prompt='Password', help='Frontend Master Password')
 def downloader(id, password, course):
