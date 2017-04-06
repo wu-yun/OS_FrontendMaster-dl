@@ -42,7 +42,7 @@ python frontendmasters-dl.py --help
 Usage: frontendmasters-dl.py [OPTIONS]
 
 Options:
-  --course TEXT    Course ID (e.g. `firebase-reac`)
+  --course TEXT    Course ID (e.g. `firebase-react`)
   --id TEXT        Frontend Master Username
   --password TEXT  Frontend Master Password
   --help           Show this message and exit.
