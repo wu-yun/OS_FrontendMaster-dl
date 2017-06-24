@@ -144,9 +144,12 @@ class Spider(object):
         return course
 
     def _get_video_source(self):
-        video_tag = self.browser.find_element_by_tag_name('video')
-        source_link = video_tag.get_attribute('src')
-        return source_link
+        try:
+            video_tag = self.browser.find_element_by_tag_name('video')
+            source_link = video_tag.get_attribute('src')
+            return source_link
+        except:
+            return "http://placehold.it/500x500"
 
     def download_course(self, course):
         # Create download directory
