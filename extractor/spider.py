@@ -39,10 +39,12 @@ class Spider(object):
         # Get downloadable CDN
         course_downloadbale = self._get_downloadable_links(course_detailed_list)
 
-        self.browser.close()
+        
 
         # Download course videos
         self.download_course(course_downloadbale)
+
+        # self.browser.close()
 
 
     def _get_detailed_course_list(self, course):
@@ -174,4 +176,4 @@ class Spider(object):
 
                 file_path = course_path + '/' + format_filename(filename)
 
-                download_file(subsection['downloadable_url'], file_path)
+                download_file(subsection['downloadable_url'], file_path, self)

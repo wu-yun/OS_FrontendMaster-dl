@@ -10,7 +10,7 @@ def format_filename(filename_str):
     filename = filename.replace(' ', '_')
     return filename
 
-def download_file(url, path):
+def download_file(url, path, self):
     # FIXME(Xinyang): Better exception handling for empty url
     if url is None:
         return
@@ -18,11 +18,15 @@ def download_file(url, path):
         return
 
     if not os.path.isfile(path) or os.path.getsize(path) == 0:
-        buff = urlopen(url)
+        self.browser.get(url)
+        temporaryURL = self.browser.current_url
+        self.browser.back()
+        buff = urlopen(temporaryURL)
         print("Downloading: %s" % (path))
 
         with open(path, 'wb') as local_file:
             local_file.write(buff.read())
+
 
 def create_path(path):
     if not os.path.exists(path):
