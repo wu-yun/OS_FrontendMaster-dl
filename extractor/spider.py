@@ -25,8 +25,8 @@ class Spider(object):
         self.browser.get(URL_LOG_IN)
         time.sleep(2)
 
-        username_field = self.browser.find_element_by_id('rcp_user_login')
-        password_field = self.browser.find_element_by_id('rcp_user_pass')
+        username_field = self.browser.find_element_by_id('username')
+        password_field = self.browser.find_element_by_id('password')
 
         username_field.send_keys(id)
         password_field.send_keys(password)
@@ -60,9 +60,9 @@ class Spider(object):
         soup_page = BeautifulSoup(self.browser.page_source, 'html.parser')
 
         # Find video nav list
-        sections = soup_page.find('ul', {'class': 'video-nav-list'})
+        sections = soup_page.find('section', {'class': 'CourseToc'})
         sections_items = sections.find_all(
-            'li', {'class': 'video-nav-section'}
+            'ul', {'class': 'LessonList'}
         )
 
         sections = self._get_section_data(sections_items)
@@ -79,11 +79,9 @@ class Spider(object):
                 'subsections': []
             }
 
-            course_section['title'] = item.find(
-                'h4', {'class': 'video-nav-section-title'}
-            ).getText()
-
-            videos_section = item.find('ul')
+            course_section['title'] = '' # it should be prescending sibling <h3> 
+            
+            videos_section = item
             videos_section_items = videos_section.find_all('li')
 
             videos_data = self._get_videos_data(videos_section_items)
@@ -106,9 +104,9 @@ class Spider(object):
 
             course_subsection['url'] = video.find('a')['href']
             title = video.find('a').find(
-                'span', {'class', 'text'}
+                'div', {'class', 'heading'}
             ).find(
-                'span', {'class', 'title'}
+                'h3', { }
             ).getText()
 
             course_subsection['title'] = format_filename(title)
@@ -135,7 +133,7 @@ class Spider(object):
                         format_filename(section['title']),
                         format_filename(subsection['title'])))
 
-                    video_url = url + subsection['url']
+                    video_url = 'https://frontendmasters.com' + subsection['url']
                     self.browser.get(video_url)
                     time.sleep(8)
 
