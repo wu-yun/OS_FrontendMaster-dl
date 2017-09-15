@@ -39,7 +39,7 @@ class Spider(object):
         # Get downloadable CDN
         course_downloadbale = self._get_downloadable_links(course_detailed_list)
 
-        
+
 
         # Download course videos
         self.download_course(course_downloadbale)
@@ -72,15 +72,19 @@ class Spider(object):
 
     def _get_section_data(self, sections_items):
         sections = []
-        for item in sections_items:
+
+        soup_page = BeautifulSoup(self.browser.page_source, 'html.parser')
+        titles = soup_page.find('section', {'class': 'CourseToc'}).find_all('h3', {'class', 'lessongroup'})
+
+        for index, item in enumerate(sections_items, start=0):
             # Course section data structure
             course_section = {
                 'title': None,
                 'subsections': []
             }
 
-            course_section['title'] = '' # it should be prescending sibling <h3> 
-            
+            course_section['title'] = titles[index].getText()
+
             videos_section = item
             videos_section_items = videos_section.find_all('li')
 
@@ -168,8 +172,8 @@ class Spider(object):
                 print("Downloading: {0}".format(
                     format_filename(subsection_title)))
 
-                filename = str(i1) + '-' + str(i2) + format_filename(
-                    section_title) + '|' + format_filename(
+                filename = str(i1) + '-' + str(i2) + '-' + format_filename(
+                    section_title) + '-' + format_filename(
                         subsection_title) + '.mp4'
 
                 file_path = course_path + '/' + format_filename(filename)
