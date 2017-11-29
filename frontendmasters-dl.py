@@ -5,8 +5,9 @@ from extractor.spider import Spider
 @click.option('--course', prompt='Course ID', help='Course ID (e.g. `firebase-react`)')
 @click.option('--id', prompt='Username', help='Frontend Master Username')
 @click.option('--password', prompt='Password', help='Frontend Master Password')
-def downloader(id, password, course):
-    spider = Spider()
+@click.option('--mute-audio', help='Mute Frontend Master browser tab', is_flag=True)
+def downloader(id, password, course, mute_audio):
+    spider = Spider(mute_audio)
     click.secho('>>> Login with your credential', fg='green')
     spider.login(id, password)
 

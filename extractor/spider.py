@@ -18,8 +18,13 @@ URL_LOG_IN                    = 'https://frontendmasters.com/login/'
 URL_COURSE_LIST               = 'https://frontendmasters.com/courses/'
 
 class Spider(object):
-    def __init__(self):
-        self.browser = webdriver.Chrome()
+    def __init__(self, mute_audio):
+        options = webdriver.ChromeOptions()
+
+        if mute_audio:
+            options.add_argument("--mute-audio")
+
+        self.browser = webdriver.Chrome(chrome_options=options)
 
     def login(self, id, password):
         self.browser.get(URL_LOG_IN)
