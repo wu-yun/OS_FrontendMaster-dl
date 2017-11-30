@@ -42,17 +42,18 @@ python frontendmasters-dl.py --help
 Usage: frontendmasters-dl.py [OPTIONS]
 
 Options:
-  --course TEXT    Course ID (e.g. `firebase-react`)
-  --id TEXT        Frontend Master Username
-  --password TEXT  Frontend Master Password
-  --mute-audio     Mute Frontend Master browser tab
-  --help           Show this message and exit.
+  --course TEXT     Course ID (e.g. `firebase-react`)
+  --id TEXT         Frontend Master Username
+  --password TEXT   Frontend Master Password
+  --mute-audio      Mute Frontend Master browser tab
+  --high-resolution Download high resolution videos
+  --help            Show this message and exit.
 ```
 
 To download one particular course,
 
 ```bash
-python frontendmasters-dl.py --id YOUR-USERNAME --password YOUR-PASSWORD --course COURSE-ID --mute-audio
+python frontendmasters-dl.py --id YOUR-USERNAME --password YOUR-PASSWORD --course COURSE-ID --mute-audio --high-resolution
 ```
 
 Alternatively you can use interactive prompt by running the script directly,

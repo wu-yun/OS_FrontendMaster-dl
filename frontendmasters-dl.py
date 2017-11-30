@@ -6,13 +6,14 @@ from extractor.spider import Spider
 @click.option('--id', prompt='Username', help='Frontend Master Username')
 @click.option('--password', prompt='Password', help='Frontend Master Password')
 @click.option('--mute-audio', help='Mute Frontend Master browser tab', is_flag=True)
-def downloader(id, password, course, mute_audio):
+@click.option('--high-resolution', help='Download high resolution videos', is_flag=True)
+def downloader(id, password, course, mute_audio, high_resolution):
     spider = Spider(mute_audio)
     click.secho('>>> Login with your credential', fg='green')
     spider.login(id, password)
 
     click.secho('>>> Downloading course: ' + course, fg='green')
-    spider.download(course)
+    spider.download(course, high_resolution)
 
     click.secho('>>> Download Completed! Thanks for using frontendmasters-dl', fg='green')
 

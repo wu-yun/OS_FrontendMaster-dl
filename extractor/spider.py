@@ -37,12 +37,12 @@ class Spider(object):
         password_field.send_keys(password)
         password_field.send_keys(Keys.RETURN)
 
-    def download(self, course):
+    def download(self, course, high_resolution):
         # Get detailed course list
         course_detailed_list = self._get_detailed_course_list(course)
 
         # Get downloadable CDN
-        course_downloadbale = self._get_downloadable_links(course_detailed_list)
+        course_downloadbale = self._get_downloadable_links(course_detailed_list, high_resolution)
 
 
 
@@ -123,7 +123,7 @@ class Spider(object):
 
         return subsections
 
-    def _get_downloadable_links(self, course):
+    def _get_downloadable_links(self, course, high_resolution):
         # course data structure
         # {
         #     'title': course,
@@ -145,6 +145,14 @@ class Spider(object):
                     video_url = 'https://frontendmasters.com' + subsection['url']
                     self.browser.get(video_url)
                     time.sleep(8)
+
+                    if high_resolution:
+                        resolution_button = self.browser.find_element_by_class_name("fm-vjs-quality")
+                        resolution_button.click()
+
+                        high_resolution_text = resolution_button.find_element_by_tag_name("li")
+                        high_resolution_text.click()
+                        time.sleep(3)
 
                     url_str = self._get_video_source()
                     print("Video URL: {0}".format(url_str))
