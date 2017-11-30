@@ -162,11 +162,12 @@ class Spider(object):
 
     def download_course(self, course):
         # Create download directory
-        create_path('./Download')
+        download_path = os.path.join(os.path.curdir, 'Download')
+        create_path(download_path)
         title = course['title']
 
         # Create course directory
-        course_path = './Download/{0}'.format(title)
+        course_path = os.path.join(download_path, title)
         create_path(course_path)
 
         for i1, section in enumerate(course['sections']):
@@ -181,6 +182,6 @@ class Spider(object):
                     section_title) + '-' + format_filename(
                         subsection_title) + '.' + get_file_path_from_url(subsection['downloadable_url'])
 
-                file_path = course_path + '/' + format_filename(filename)
+                file_path = os.path.join(course_path, format_filename(filename))
 
                 download_file(subsection['downloadable_url'], file_path, self)
