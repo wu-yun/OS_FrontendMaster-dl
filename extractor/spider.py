@@ -179,7 +179,7 @@ class Spider(object):
 
                 filename = str(i1) + '-' + str(i2) + '-' + format_filename(
                     section_title) + '-' + format_filename(
-                        subsection_title) + '.mp4'
+                        subsection_title) + '.' + get_file_path_from_url(subsection['downloadable_url'])
 
                 file_path = course_path + '/' + format_filename(filename)
 
