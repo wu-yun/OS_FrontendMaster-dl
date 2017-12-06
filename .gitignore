@@ -1,6 +1,7 @@
 config.rb
 config.py
 /courses
+.idea
 DownloadableLinks_*.json
 **/*/*.pyc
 *.pyc

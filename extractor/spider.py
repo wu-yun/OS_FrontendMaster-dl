@@ -37,17 +37,16 @@ class Spider(object):
         password_field.send_keys(password)
         password_field.send_keys(Keys.RETURN)
 
-    def download(self, course, high_resolution):
+    def download(self, course, high_resolution, video_per_video):
         # Get detailed course list
         course_detailed_list = self._get_detailed_course_list(course)
 
         # Get downloadable CDN
-        course_downloadbale = self._get_downloadable_links(course_detailed_list, high_resolution)
-
-
+        course_downloadbale = self._get_downloadable_links(course_detailed_list, high_resolution, video_per_video)
 
         # Download course videos
-        self.download_course(course_downloadbale)
+        if not video_per_video:
+            self.download_course(course_downloadbale)
 
         # self.browser.close()
 
@@ -123,7 +122,7 @@ class Spider(object):
 
         return subsections
 
-    def _get_downloadable_links(self, course, high_resolution):
+    def _get_downloadable_links(self, course, high_resolution, video_per_video):
         # course data structure
         # {
         #     'title': course,
@@ -133,8 +132,15 @@ class Spider(object):
 
         url = course['url']
 
-        for section in course['sections']:
-            for subsection in section['subsections']:
+        if video_per_video:
+            title = course['title']
+            download_path = self.create_download_directory()
+            course_path = self.create_course_directory(download_path, title)
+
+        for i1, section in enumerate(course['sections']):
+            section_title = section['title']
+
+            for i2, subsection in enumerate(section['subsections']):
                 if subsection['downloadable_url'] is None:
 
                     print("Retriving: {0}/{1}/{2}".format(
@@ -157,6 +163,8 @@ class Spider(object):
                     url_str = self._get_video_source()
                     print("Video URL: {0}".format(url_str))
                     subsection['downloadable_url'] = url_str
+                    if video_per_video:
+                        self.download_video(i1, i2, subsection, section_title, course_path)
 
         return course
 
@@ -168,28 +176,36 @@ class Spider(object):
         except:
             return "http://placehold.it/500x500"
 
-    def download_course(self, course):
-        # Create download directory
+    def create_download_directory(self):
         download_path = os.path.join(os.path.curdir, 'Download')
         create_path(download_path)
-        title = course['title']
+        return download_path
 
-        # Create course directory
+    def create_course_directory(self, download_path, title):
         course_path = os.path.join(download_path, title)
         create_path(course_path)
+        return course_path
+
+    def download_course(self, course):
+        title = course['title']
+        download_path = self.create_download_directory()
+        course_path = self.create_course_directory(download_path, title)
 
         for i1, section in enumerate(course['sections']):
             section_title = section['title']
 
             for i2, subsection in enumerate(section['subsections']):
-                subsection_title = subsection['title']
-                print("Downloading: {0}".format(
-                    format_filename(subsection_title)))
+                self.download_video(i1, i2, subsection, section_title, course_path)
 
-                filename = str(i1) + '-' + str(i2) + '-' + format_filename(
-                    section_title) + '-' + format_filename(
-                        subsection_title) + '.' + get_file_path_from_url(subsection['downloadable_url'])
+    def download_video(self, i1, i2, subsection, section_title, course_path):
+        subsection_title = subsection['title']
+        print("Downloading: {0}".format(
+            format_filename(subsection_title)))
 
-                file_path = os.path.join(course_path, format_filename(filename))
+        filename = str(i1) + '-' + str(i2) + '-' + format_filename(
+            section_title) + '-' + format_filename(
+            subsection_title) + '.' + get_file_path_from_url(subsection['downloadable_url'])
 
-                download_file(subsection['downloadable_url'], file_path, self)
+        file_path = os.path.join(course_path, format_filename(filename))
+
+        download_file(subsection['downloadable_url'], file_path, self)
