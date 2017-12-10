@@ -70,13 +70,14 @@ The default download path is `./Download` inside the repository directory.
 
 As always, PR of any kind is welcomed! :rocket:
 
+1. [x] Support Window OS
 1. [ ] Support better exception handling 
 1. [ ] Add more tests
 1. [ ] Decouple page element and crawler logic
-1. [ ] Support Window OS
 1. [ ] Support download all available courses
 1. [ ] Switch to `setuptools`
-1. [ ] Switch to headless browser (e.g. PhantomJS)
+1. [ ] Switch to headless browser (e.g. PhantomJS, Chrome)
+1. [ ] Support subtitle download
 
 ### LICENSE
 
