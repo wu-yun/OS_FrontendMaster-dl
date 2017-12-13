@@ -21,6 +21,13 @@ class Spider(object):
     def __init__(self, mute_audio):
         options = webdriver.ChromeOptions()
 
+        # FM detects useragent and says 403 as return
+        # so we just define valid useragent
+        options.add_argument("--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'")
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1920x1080")
+
         if mute_audio:
             options.add_argument("--mute-audio")
 
