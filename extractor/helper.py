@@ -43,7 +43,6 @@ def get_file_path_from_url(url):
     return url.split("?")[0].split(".")[-1]
 
 def download_file(url, path, self):
-    # FIXME(Xinyang): Better exception handling for empty url
     if url is None:
         return
     if len(url) <= 1:
