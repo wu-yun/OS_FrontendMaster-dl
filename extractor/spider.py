@@ -150,7 +150,16 @@ class Spider(object):
             for i2, subsection in enumerate(section['subsections']):
                 if subsection['downloadable_url'] is None:
 
-                    print("Retriving: {0}/{1}/{2}".format(
+                    file_path_without_extension = \
+                        get_local_file_path_without_extension(
+                            i1, i2, subsection, section_title, course_path
+                        )
+                    found_file = find_file(file_path_without_extension)
+
+                    if found_file and is_file_downloaded(found_file):
+                        continue
+
+                    print("Retrieving: {0}/{1}/{2}".format(
                         format_filename(course['title']),
                         format_filename(section['title']),
                         format_filename(subsection['title'])))
@@ -158,6 +167,13 @@ class Spider(object):
                     video_url = 'https://frontendmasters.com' + subsection['url']
                     self.browser.get(video_url)
                     time.sleep(8)
+
+                    while self.browser.find_elements_by_class_name('Message'):
+                        print "429: You have reached maximum request limit. " \
+                              "Sleeping for 15 minutes"
+                        time.sleep(15 * 60)
+                        self.browser.refresh()
+                        time.sleep(10)
 
                     if high_resolution:
                         resolution_button = self.browser.find_element_by_class_name("fm-vjs-quality")
@@ -209,10 +225,8 @@ class Spider(object):
         print("Downloading: {0}".format(
             format_filename(subsection_title)))
 
-        filename = str(i1) + '-' + str(i2) + '-' + format_filename(
-            section_title) + '-' + format_filename(
-            subsection_title) + '.' + get_file_path_from_url(subsection['downloadable_url'])
-
-        file_path = os.path.join(course_path, format_filename(filename))
+        file_path = get_local_file_path(
+            i1, i2, subsection, section_title, course_path
+        )
 
         download_file(subsection['downloadable_url'], file_path, self)
