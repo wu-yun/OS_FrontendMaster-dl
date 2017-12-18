@@ -42,17 +42,14 @@ def is_file_downloaded(path):
 def get_file_path_from_url(url):
     return url.split("?")[0].split(".")[-1]
 
-def download_file(url, path, self):
+def download_file(url, path):
     if url is None:
         return
     if len(url) <= 1:
         return
 
     if not is_file_downloaded(path):
-        self.browser.get(url)
-        temporaryURL = self.browser.current_url
-        self.browser.back()
-        buff = urlopen(temporaryURL)
+        buff = urlopen(url)
         print("Downloading: %s" % (path))
 
         with open(path, 'wb') as local_file:

@@ -229,4 +229,4 @@ class Spider(object):
             i1, i2, subsection, section_title, course_path
         )
 
-        download_file(subsection['downloadable_url'], file_path, self)
+        download_file(subsection['downloadable_url'], file_path)
