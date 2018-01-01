@@ -138,11 +138,9 @@ class Spider(object):
         # }
 
         url = course['url']
-
-        if video_per_video:
-            title = course['title']
-            download_path = self.create_download_directory()
-            course_path = self.create_course_directory(download_path, title)
+        title = course['title']
+        download_path = self.create_download_directory()
+        course_path = self.create_course_directory(download_path, title)
 
         for i1, section in enumerate(course['sections']):
             section_title = section['title']
