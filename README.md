@@ -40,12 +40,13 @@ python frontendmasters-dl.py --help
 Usage: frontendmasters-dl.py [OPTIONS]
 
 Options:
-  --course TEXT     Course ID (e.g. `firebase-react`)
-  --id TEXT         Frontend Master Username
-  --password TEXT   Frontend Master Password
-  --mute-audio      Mute Frontend Master browser tab
-  --high-resolution Download high resolution videos
-  --help            Show this message and exit.
+  --course TEXT      Course ID (e.g. `firebase-react`)
+  --id TEXT          Frontend Master Username
+  --password TEXT    Frontend Master Password
+  --mute-audio       Mute Frontend Master browser tab
+  --high-resolution  Download high resolution videos
+  --video-per-video  Download one video at a time
+  --help             Show this message and exit.
 ```
 
 To download one particular course,
