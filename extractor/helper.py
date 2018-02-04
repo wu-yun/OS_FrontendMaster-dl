@@ -51,9 +51,13 @@ def download_file(url, path):
     if not is_file_downloaded(path):
         buff = urlopen(url)
         print("Downloading: %s" % (path))
+        
+        try:
+            with open(path, 'wb') as local_file:
+                local_file.write(buff.read())
+        except Exception as err:
+            print(err)
 
-        with open(path, 'wb') as local_file:
-            local_file.write(buff.read())
 
 
 def create_path(path):
