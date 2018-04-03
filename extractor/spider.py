@@ -45,6 +45,9 @@ class Spider(object):
         password_field.send_keys(Keys.RETURN)
 
     def download(self, course, high_resolution, video_per_video):
+        if self.browser.find_elements_by_class_name('Message'):
+            print "Your username/password was incorrect"
+            exit(1)
         # Get detailed course list
         course_detailed_list = self._get_detailed_course_list(course)
 
